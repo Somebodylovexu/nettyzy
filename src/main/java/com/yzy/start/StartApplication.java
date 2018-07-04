@@ -1,6 +1,5 @@
 package com.yzy.start;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -15,7 +14,11 @@ public class StartApplication implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        //启动Tcp协议的Socket
-        System.out.println("启动程序！");
+
+        try {
+            new NettyServerBootstrap(9999);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
     }
 }
