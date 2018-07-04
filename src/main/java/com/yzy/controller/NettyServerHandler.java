@@ -1,10 +1,6 @@
 package com.yzy.controller;
 
-import com.yzy.common.base.BaseMsg;
-import com.yzy.common.base.LoginMsg;
-import com.yzy.common.base.PingMsg;
 import com.yzy.common.base.SocketMessage;
-import com.yzy.common.base.type.MsgType;
 import com.yzy.dataentry.connect.AlreadyChannel;
 import com.yzy.operation.service.impl.AnalysisMsg;
 import io.netty.channel.ChannelHandlerContext;
