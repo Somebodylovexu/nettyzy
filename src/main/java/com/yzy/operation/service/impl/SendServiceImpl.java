@@ -2,7 +2,6 @@ package com.yzy.operation.service.impl;
 
 import com.yzy.common.base.SocketMessage;
 import com.yzy.common.base.type.ClientType;
-import com.yzy.dataentry.connect.AlreadyChannel;
 import com.yzy.dataentry.connect.AlreadyClient;
 import com.yzy.operation.service.SendService;
 import lombok.extern.slf4j.Slf4j;

@@ -1,15 +1,11 @@
 package com.yzy.task;
 
-import com.yzy.common.base.SocketMessage;
 import com.yzy.common.utils.ResUtil;
-import com.yzy.dataentry.connect.AlreadyChannel;
 import com.yzy.dataentry.connect.AlreadyClient;
-import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 
 /**
  * @Description:
