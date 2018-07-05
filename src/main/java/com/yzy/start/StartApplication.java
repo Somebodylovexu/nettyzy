@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 /**
  * @Description:
  * @Author: Jhy
- * @Date: 2018-07-04 
+ * @Date: 2018-07-04
  */
 @Component
 public class StartApplication implements ApplicationRunner {
@@ -16,8 +16,24 @@ public class StartApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         try {
-            new NettyServerBootstrap(8888);
-        } catch (InterruptedException e1) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        new NettyServerBootstrap(9999);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    new WebSocketServer(9998);
+                }
+            }).start();
+        } catch (Exception e1) {
             e1.printStackTrace();
         }
     }
