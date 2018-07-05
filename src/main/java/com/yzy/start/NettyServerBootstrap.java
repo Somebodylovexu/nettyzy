@@ -21,12 +21,12 @@ public class NettyServerBootstrap {
 
     private int port;
 
-    public NettyServerBootstrap(int port) throws InterruptedException {
+    public NettyServerBootstrap(int port) {
         this.port = port;
         bind();
     }
 
-    private void bind() throws InterruptedException {
+    private void bind() {
 
         EventLoopGroup boss = new NioEventLoopGroup();
         EventLoopGroup worker = new NioEventLoopGroup();
@@ -47,7 +47,12 @@ public class NettyServerBootstrap {
                 p.addLast(new NettyServerHandler());
             }
         });
-        ChannelFuture channelFuture = bootstrap.bind(port).sync();
+        ChannelFuture channelFuture = null;
+        try {
+            channelFuture = bootstrap.bind(port).sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (channelFuture.isSuccess()) {
             log.info("----  netty service start success !  ----");
         }

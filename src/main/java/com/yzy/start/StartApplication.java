@@ -16,23 +16,11 @@ public class StartApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         try {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        new NettyServerBootstrap(9999);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
+            //启动针对于移动设备服务
+            new Thread(() -> new NettyServerBootstrap(9999)).start();
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    new WebSocketServer(9998);
-                }
-            }).start();
+            //启动针对于web端服务
+            new Thread(() -> new WebSocketServer(9998)).start();
         } catch (Exception e1) {
             e1.printStackTrace();
         }

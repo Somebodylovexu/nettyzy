@@ -8,11 +8,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.stream.ChunkedWriteHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author：hpp
@@ -20,8 +19,9 @@ import org.slf4j.LoggerFactory;
  * @description:
  */
 
+@Slf4j
 public class WebSocketServer {
-    final static Logger logger = LoggerFactory.getLogger(WebSocketServer.class);
+
     int port;
 
     public WebSocketServer(int port) {
@@ -46,7 +46,7 @@ public class WebSocketServer {
                     sc.pipeline().addLast("handler",new WebsocketHandler());
                 }
             });
-            logger.info("websocket服务端已开启,等待客户端连接...");
+            log.info("websocket服务端已开启,等待客户端连接...");
             Channel channel = serverBootstrap.bind(port).sync().channel();
             channel.closeFuture().sync();
         } catch (Exception e) {
