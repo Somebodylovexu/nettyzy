@@ -6,6 +6,7 @@ package com.yzy.operation.service;
  */
 
 import com.yzy.common.base.SocketMessage;
+import io.netty.channel.ChannelHandlerContext;
 
 /**
  * 处理从客户端接收的消息
@@ -17,5 +18,5 @@ public interface ReceiveClientMsg {
      * @param socketMessage
      * @return
      */
-    SocketMessage answer(SocketMessage socketMessage);
+    void answer(SocketMessage socketMessage, ChannelHandlerContext channel);
 }

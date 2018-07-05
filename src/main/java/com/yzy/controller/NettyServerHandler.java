@@ -34,7 +34,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<String> {
     //读取客户端消息
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String socketMessage) throws Exception {
-        AnalysisMsg.analysis(socketMessage);
+        AnalysisMsg.analysis(socketMessage,ctx);
         ReferenceCountUtil.release(socketMessage);
 
     }

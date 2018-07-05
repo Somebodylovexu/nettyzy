@@ -3,7 +3,7 @@ package com.yzy.operation.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.yzy.common.base.SocketMessage;
 import com.yzy.operation.service.ReceiveClientFactory;
-import com.yzy.operation.service.ReceiveClientMsg;
+import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 @Slf4j
 public class AnalysisMsg {
 
-    public static void analysis(String msg) {
+    public static void analysis(String msg, ChannelHandlerContext ctx) {
         log.info("Receive the message:{}" + msg);
         if (StringUtils.isEmpty(msg)) {
             return;
@@ -24,12 +24,14 @@ public class AnalysisMsg {
         SocketMessage socketMessage;
         try {
             socketMessage = JSONObject.parseObject(msg, SocketMessage.class);
-        } catch (Exception e){
+        } catch (Exception e) {
             return;
         }
 
 
-        ReceiveClientMsg rcm = ReceiveClientFactory.createRcm(socketMessage);
+        AbsReceiveClientMsg rcm = ReceiveClientFactory.createRcm(socketMessage);
+        rcm.save(socketMessage, ctx);
+        rcm.answer(socketMessage, ctx);
 
     }
 }

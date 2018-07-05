@@ -17,7 +17,7 @@ public class StartApplication implements ApplicationRunner {
 
         try {
             //启动针对于移动设备服务
-            new Thread(() -> new NettyServerBootstrap(9999)).start();
+            new Thread(() -> new NettyServerBootstrap(8888)).start();
 
             //启动针对于web端服务
             new Thread(() -> new WebSocketServer(9998)).start();

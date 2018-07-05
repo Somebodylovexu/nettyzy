@@ -1,6 +1,5 @@
 package com.yzy.dataentry.connect;
 
-import com.sun.corba.se.spi.transport.SocketInfo;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.socket.SocketChannel;
