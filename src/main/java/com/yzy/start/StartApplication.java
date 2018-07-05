@@ -16,7 +16,7 @@ public class StartApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         try {
-            new NettyServerBootstrap(9999);
+            new NettyServerBootstrap(8888);
         } catch (InterruptedException e1) {
             e1.printStackTrace();
         }

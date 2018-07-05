@@ -20,28 +20,28 @@ public class AlreadyChannel {
 
     public static ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
-    private static Map<String, SocketChannel> map = new ConcurrentHashMap<>();
+    private static Map<String, SocketChannel> channelMap = new ConcurrentHashMap<>();
 
     public static void add(String channelId, SocketChannel socketChannel) {
-        map.put(channelId, socketChannel);
+        channelMap.put(channelId, socketChannel);
         group.add(socketChannel);
         log.info("AlreadyChannel add : " + channelId);
     }
 
     public static Channel get(String channelId) {
-        return map.get(channelId);
+        return channelMap.get(channelId);
     }
 
     public static int size() {
-        return map.size();
+        return channelMap.size();
     }
 
     public static void remove(SocketChannel socketChannel) {
 
-        for (Map.Entry entry : map.entrySet()) {
+        for (Map.Entry entry : channelMap.entrySet()) {
             if (entry.getValue() == socketChannel) {
                 String key = (String) entry.getKey();
-                map.remove(key);
+                channelMap.remove(key);
                 group.remove(socketChannel);
                 log.info("Clinet:" + key + " has been removed.");
             }

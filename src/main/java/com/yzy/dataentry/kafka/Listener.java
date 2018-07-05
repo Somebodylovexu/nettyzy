@@ -1,4 +1,4 @@
-package com.yzy.common.conf;
+package com.yzy.dataentry.kafka;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -12,9 +12,9 @@ import org.springframework.kafka.annotation.KafkaListener;
 @Slf4j
 public class Listener {
 
-    @KafkaListener(topics = {"test"})
+/*    @KafkaListener(topics = {"test"})
     public void listen(ConsumerRecord<?, ?> record) {
-        log.info("kafka的key: " + record.key());
-        log.info("kafka的value: " + record.value().toString());
-    }
+        log.info("kafka key: " + record.key());
+        log.info("kafka value: " + record.value().toString());
+    }*/
 }

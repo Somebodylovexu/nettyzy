@@ -1,8 +1,11 @@
 package com.yzy.operation.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.yzy.common.base.SocketMessage;
+import com.yzy.operation.service.ReceiveClientFactory;
+import com.yzy.operation.service.ReceiveClientMsg;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
  * @Description:解析消息
@@ -10,10 +13,23 @@ import org.springframework.stereotype.Component;
  * @Date: 2018-07-04 
  */
 @Slf4j
-@Component
 public class AnalysisMsg {
 
-    public void analysis(SocketMessage msg){
+    public static void analysis(String msg) {
+        log.info("Receive the message:{}" + msg);
+        if (StringUtils.isEmpty(msg)) {
+            return;
+        }
+
+        SocketMessage socketMessage;
+        try {
+            socketMessage = JSONObject.parseObject(msg, SocketMessage.class);
+        } catch (Exception e){
+            return;
+        }
+
+
+        ReceiveClientMsg rcm = ReceiveClientFactory.createRcm(socketMessage);
 
     }
 }

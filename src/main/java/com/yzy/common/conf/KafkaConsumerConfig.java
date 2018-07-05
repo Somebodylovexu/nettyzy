@@ -1,5 +1,6 @@
 package com.yzy.common.conf;
 
+import com.yzy.dataentry.kafka.Listener;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
