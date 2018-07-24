@@ -15,11 +15,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: 2018-07-04 
  */
 @Slf4j
-public class AlreadyClient {
+public final class AlreadyClient {
 
-    public static ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    public static final ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
-    private static Map<String, SocketInfo> clientMap = new ConcurrentHashMap<>();
+    private static final Map<String, SocketInfo> clientMap = new ConcurrentHashMap<>();
+
+    private AlreadyClient(){
+
+    }
 
     public static void add(String clientId, String channelId, SocketChannel socketChannel) {
         SocketInfo si = getClient(clientId);
@@ -41,10 +45,7 @@ public class AlreadyClient {
             return null;
         }
 
-        Collection<SocketChannel> values = socketInfo.channel_channel.values();
-        for (SocketChannel channel : values) {
-            list.add(channel);
-        }
+        list.addAll(socketInfo.channel_channel.values());
         return list;
     }
 
@@ -58,8 +59,13 @@ public class AlreadyClient {
      */
     public static void remove(String clientId) {
         log.info("remove client:{}", clientId);
+        List<SocketChannel> re = getSocket(clientId);
+        if (re != null) {
+            for (SocketChannel socketChannel : re) {
+                group.remove(socketChannel);
+            }
+        }
         clientMap.remove(clientId);
-        group.removeAll(getSocket(clientId));
     }
 
     /**
@@ -119,8 +125,6 @@ public class AlreadyClient {
             for (Map.Entry entry : this.channel_channel.entrySet()) {
                 if (socketChannel.equals(entry.getValue())) {
                     String channelId = (String) entry.getKey();
-                    this.channelId.remove(channelId);
-                    this.channel_channel.remove(channelId);
                     return channelId;
                 }
             }
@@ -133,8 +137,14 @@ public class AlreadyClient {
             String channel = getChannelId(socketChannel);
             if (channel == null)
                 return null;
-            this.channelId.remove(channel);
-            this.channel_channel.remove(channel);
+
+            if (size() == 1) {
+                clientMap.remove(this.clientId);
+            } else {
+                this.channelId.remove(channel);
+                this.channel_channel.remove(channel);
+            }
+
             log.info("Client:{},SocketChannel{}:has been removed.", clientId, channelId);
             return this;
         }
