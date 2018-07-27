@@ -7,18 +7,23 @@ import com.yzy.dataentry.connect.AlreadyClient;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
- * @Description:
+ * @Description:响应客户端消息工具
  * @Author: Jhy
  * @Date: 2018-07-05 
  */
 @Slf4j
+@Component
 public class ResUtil {
+    @Autowired
+    private AlreadyClient alreadyClient;
 
-    public static void send(String clientId,String msg){
+    public void send(String clientId,String msg){
         SocketMessage sm = new SocketMessage();
         sm.setClientId(clientId);
         MessageInfo mi = new MessageInfo();
@@ -27,8 +32,8 @@ public class ResUtil {
         send(sm);
     }
 
-    public static void send(SocketMessage sm) {
-        List<SocketChannel> list = AlreadyClient.getSocket(sm.getClientId());
+    public void send(SocketMessage sm) {
+        List<SocketChannel> list = alreadyClient.getSocket(sm.getClientId());
         String result = JSONObject.toJSONString(sm);
         for (SocketChannel socketChannel : list) {
             socketChannel.writeAndFlush(result);
@@ -39,7 +44,7 @@ public class ResUtil {
         log.info("res:{},to:{}", result, sm.getClientId());
     }
 
-    public static void send(ChannelHandlerContext channel, SocketMessage sm) {
+    public void send(ChannelHandlerContext channel, SocketMessage sm) {
         String result = JSONObject.toJSONString(sm);
         channel.channel().writeAndFlush(result);
         log.info("res:{},to:{}", result, sm.getClientId());

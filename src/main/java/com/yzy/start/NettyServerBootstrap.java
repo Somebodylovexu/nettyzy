@@ -10,6 +10,8 @@ import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @Description:
@@ -17,16 +19,18 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 2018-07-04 
  */
 @Slf4j
-public class NettyServerBootstrap {
+@Component
+public class NettyServerBootstrap implements Runnable {
 
-    private int port;
+    @Autowired
+    private NettyServerHandler nettyServerHandler;
 
-    public NettyServerBootstrap(int port) {
-        this.port = port;
-        bind();
+    public static final int port = 8888;
+
+    public NettyServerBootstrap() {
     }
 
-    private void bind() {
+    public void bind() {
 
         EventLoopGroup boss = new NioEventLoopGroup();
         EventLoopGroup worker = new NioEventLoopGroup();
@@ -44,7 +48,7 @@ public class NettyServerBootstrap {
                 ChannelPipeline p = socketChannel.pipeline();
                 p.addLast(new ObjectEncoder());
                 p.addLast(new ObjectDecoder(ClassResolvers.cacheDisabled(null)));
-                p.addLast(new NettyServerHandler());
+                p.addLast(nettyServerHandler);
             }
         });
         ChannelFuture channelFuture = null;
@@ -58,4 +62,8 @@ public class NettyServerBootstrap {
         }
     }
 
+    @Override
+    public void run() {
+        bind();
+    }
 }

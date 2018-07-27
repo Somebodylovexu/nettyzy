@@ -8,6 +8,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @Description:
@@ -15,12 +17,19 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 2018-07-04 
  */
 @Slf4j
+@Component
 public class NettyServerHandler extends SimpleChannelInboundHandler<String> {
+
+    @Autowired
+    private AnalysisMsg analysisMsg;
+
+    @Autowired
+    private AlreadyClient alreadyClient;
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         //channel失效，从Map中移除
-        AlreadyClient.remove((SocketChannel) ctx.channel());
+        alreadyClient.remove((SocketChannel) ctx.channel());
     }
 
     @Override
@@ -32,7 +41,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<String> {
     //读取客户端消息
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String socketMessage) throws Exception {
-        AnalysisMsg.analysis(socketMessage,ctx);
+        analysisMsg.analysis(socketMessage,ctx);
         ReferenceCountUtil.release(socketMessage);
 
     }

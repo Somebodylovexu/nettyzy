@@ -5,22 +5,25 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author：hpp
  * @date：2018/7/5 11:31
  * @description:
  */
+@Slf4j
+@Component
 public class WebsocketHandler extends SimpleChannelInboundHandler<Object> {
-    private static final Logger logger = LoggerFactory.getLogger(WebsocketHandler.class);
+
     private WebSocketServerHandshaker webSocketServerHandshaker;
 
 
     @Override
     public void channelActive(ChannelHandlerContext context) throws Exception {
-        logger.info("客户端与服务端第一次连接" + context.toString());
+        log.info("客户端与服务端第一次连接" + context.toString());
     }
 
     @Override
@@ -47,7 +50,7 @@ public class WebsocketHandler extends SimpleChannelInboundHandler<Object> {
             return;
         }
         if (!(webSocketFrame instanceof TextWebSocketFrame)) {//判断是否是二进制消息
-            System.out.println("不支持二进制消息");
+            log.info("不支持二进制消息");
             throw new RuntimeException(this.getClass().getName());
         }
         //返回应答消息
@@ -55,13 +58,13 @@ public class WebsocketHandler extends SimpleChannelInboundHandler<Object> {
         String type = ((TextWebSocketFrame) webSocketFrame).text();
         //为每个连接做session处理
         EchartsSession.put(type, context.channel());
-        logger.info("已将用户加入{" + type + "}通道");
+        log.info("已将用户加入{" + type + "}通道");
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext context, Throwable throwable) throws Exception {
         throwable.printStackTrace();
-        logger.info(throwable.getMessage());
+        log.info(throwable.getMessage());
         context.close();
     }
 }

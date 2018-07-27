@@ -5,6 +5,7 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: 2018-07-04 
  */
 @Slf4j
+@Component
 public final class AlreadyClient {
 
     public static final ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -25,7 +27,7 @@ public final class AlreadyClient {
 
     }
 
-    public static void add(String clientId, String channelId, SocketChannel socketChannel) {
+    public void add(String clientId, String channelId, SocketChannel socketChannel) {
         SocketInfo si = getClient(clientId);
         if (si == null) {
             si = new SocketInfo();
@@ -34,11 +36,11 @@ public final class AlreadyClient {
         clientMap.put(clientId, si);
     }
 
-    public static SocketInfo getClient(String clientId) {
+    public SocketInfo getClient(String clientId) {
         return clientMap.get(clientId);
     }
 
-    public static List<SocketChannel> getSocket(String clientId) {
+    public List<SocketChannel> getSocket(String clientId) {
         List<SocketChannel> list = new ArrayList();
         SocketInfo socketInfo = getClient(clientId);
         if (socketInfo == null) {
@@ -49,7 +51,7 @@ public final class AlreadyClient {
         return list;
     }
 
-    public static int size() {
+    public int size() {
         return clientMap.size();
     }
 
@@ -57,7 +59,7 @@ public final class AlreadyClient {
      * 根据用户ID删除SocketChannel
      * @param clientId
      */
-    public static void remove(String clientId) {
+    public void remove(String clientId) {
         log.info("remove client:{}", clientId);
         List<SocketChannel> re = getSocket(clientId);
         if (re != null) {
@@ -72,7 +74,7 @@ public final class AlreadyClient {
      * 根据SocketChannel删除
      * @param socketChannel
      */
-    public static void remove(SocketChannel socketChannel) {
+    public void remove(SocketChannel socketChannel) {
         if (size() == 0)
             return;
 
@@ -84,7 +86,7 @@ public final class AlreadyClient {
     }
 
 
-    private static class SocketInfo {
+    private class SocketInfo {
 
         private String clientId;
 

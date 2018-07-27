@@ -14,7 +14,7 @@ import io.netty.channel.ChannelHandlerContext;
 public interface ReceiveClientMsg {
 
     /**
-     * 相应客户端消息
+     * 响应客户端消息
      * @param socketMessage
      * @return
      */

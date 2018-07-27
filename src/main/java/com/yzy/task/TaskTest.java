@@ -3,6 +3,7 @@ package com.yzy.task;
 import com.yzy.common.utils.ResUtil;
 import com.yzy.dataentry.connect.AlreadyClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -12,19 +13,25 @@ import org.springframework.stereotype.Component;
  * @Author: Jhy
  * @Date: 2018-07-04 
  */
-@Component
 @Slf4j
+@Component
 public class TaskTest {
+
+    @Autowired
+    private ResUtil resUtil;
+
+    @Autowired
+    private AlreadyClient alreadyClient;
 
     @Scheduled(fixedRate = 10000)
     public void get() {
-        log.info("Current number of connections : " + AlreadyClient.size());
+        log.info("Current number of connections : " + alreadyClient.size());
     }
 
     @Scheduled(fixedRate = 3000)
     public void push() {
-        if (AlreadyClient.size() != 0)
-            ResUtil.send("10086", "注意服务端发消息了！");
+        if (alreadyClient.size() != 0)
+            resUtil.send("10086", "注意服务端发消息了！");
     }
 
 }

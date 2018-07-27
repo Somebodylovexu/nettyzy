@@ -12,6 +12,8 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author：hpp
@@ -20,16 +22,18 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-public class WebSocketServer {
+@Component
+public class WebSocketServer implements Runnable{
 
-    int port;
+    @Autowired
+    private WebsocketHandler websocketHandler;
 
-    public WebSocketServer(int port) {
-        this.port = port;
-        start(port);
+    public static final int port = 9998;
+
+    public WebSocketServer() {
     }
 
-    public void start(int port) {
+    public void start() {
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         EventLoopGroup workGroup = new NioEventLoopGroup();
         try {
@@ -43,7 +47,7 @@ public class WebSocketServer {
                     sc.pipeline().addLast("http-codec",new HttpServerCodec());
                     sc.pipeline().addLast("aggregator",new HttpObjectAggregator(65536));
                     sc.pipeline().addLast("http-chunked",new ChunkedWriteHandler());
-                    sc.pipeline().addLast("handler",new WebsocketHandler());
+                    sc.pipeline().addLast("handler",websocketHandler);
                 }
             });
             log.info("websocket服务端已开启,等待客户端连接...");
@@ -59,4 +63,8 @@ public class WebSocketServer {
     }
 
 
+    @Override
+    public void run() {
+        start();
+    }
 }
