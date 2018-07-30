@@ -50,3 +50,7 @@ spring:
             max-wait: -1
             min-idle: 0
         port: 6379
+
+socketServer:
+  socketPort: 8888
+  webSocketPort: 9999

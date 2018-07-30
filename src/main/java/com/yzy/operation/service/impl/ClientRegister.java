@@ -27,7 +27,7 @@ public class ClientRegister extends AbsIReceiveClientMsg {
     public IReceiveClientMsg task() {
         String clientId = socketMessage.getClientId();
         String channelId = socketMessage.getChannelId();
-        boolean result = alreadyClient.add(clientId, channelId, (SocketChannel) chx);
+        boolean result = alreadyClient.add(clientId, channelId, (SocketChannel) chx.channel());
         if (result){
             super.answer("register success!");
         } else {
