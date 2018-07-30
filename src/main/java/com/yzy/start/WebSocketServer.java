@@ -1,6 +1,6 @@
 package com.yzy.start;
 
-import com.yzy.controller.WebsocketHandler;
+import com.yzy.socket.WebsocketHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -13,6 +13,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,7 +29,8 @@ public class WebSocketServer implements Runnable{
     @Autowired
     private WebsocketHandler websocketHandler;
 
-    public static final int port = 9998;
+    @Value("${socketServer.webSocketPort}")
+    private int port;
 
     public WebSocketServer() {
     }

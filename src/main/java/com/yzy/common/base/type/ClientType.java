@@ -5,5 +5,5 @@ package com.yzy.common.base.type;
  * @Author: Jhy
  * @Date: 2018-07-04 
  */
-public class ClientType {
+public enum ClientType {
 }

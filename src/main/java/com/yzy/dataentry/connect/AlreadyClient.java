@@ -1,10 +1,12 @@
 package com.yzy.dataentry.connect;
 
+import com.sun.corba.se.spi.transport.SocketInfo;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -19,6 +21,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public final class AlreadyClient {
 
+    @Autowired
+    private AccessControl accessControl;
+
     public static final ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     private static final Map<String, SocketInfo> clientMap = new ConcurrentHashMap<>();
@@ -27,13 +32,19 @@ public final class AlreadyClient {
 
     }
 
-    public void add(String clientId, String channelId, SocketChannel socketChannel) {
+    public boolean add(String clientId, String channelId, SocketChannel socketChannel) {
+
+        //判断是否在名单中
+        if (accessControl.isNotPass(channelId))
+            return false;
+
         SocketInfo si = getClient(clientId);
         if (si == null) {
             si = new SocketInfo();
         }
         si.add(clientId, channelId, socketChannel);
         clientMap.put(clientId, si);
+        return true;
     }
 
     public SocketInfo getClient(String clientId) {
@@ -86,7 +97,7 @@ public final class AlreadyClient {
     }
 
 
-    private class SocketInfo {
+        private class SocketInfo {
 
         private String clientId;
 

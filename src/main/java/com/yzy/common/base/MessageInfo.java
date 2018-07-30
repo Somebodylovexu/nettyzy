@@ -22,4 +22,6 @@ public class MessageInfo implements Serializable {
 
     private String msg;
 
+    private String receive;//消息接收ID
+
 }

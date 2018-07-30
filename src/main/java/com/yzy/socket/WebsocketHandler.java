@@ -1,4 +1,4 @@
-package com.yzy.controller;
+package com.yzy.socket;
 
 import com.yzy.common.base.type.EchartsSession;
 import io.netty.channel.ChannelHandlerContext;

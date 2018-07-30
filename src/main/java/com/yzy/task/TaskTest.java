@@ -1,7 +1,11 @@
 package com.yzy.task;
 
+import com.yzy.common.base.MessageInfo;
+import com.yzy.common.base.SocketMessage;
 import com.yzy.common.utils.ResUtil;
 import com.yzy.dataentry.connect.AlreadyClient;
+import com.yzy.operation.service.ReceiveClientFactory;
+import com.yzy.operation.service.impl.AbsIReceiveClientMsg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,6 +27,9 @@ public class TaskTest {
     @Autowired
     private AlreadyClient alreadyClient;
 
+    @Autowired
+    private ReceiveClientFactory receiveClientFactory;
+
     @Scheduled(fixedRate = 10000)
     public void get() {
         log.info("Current number of connections : " + alreadyClient.size());
@@ -30,8 +37,8 @@ public class TaskTest {
 
     @Scheduled(fixedRate = 3000)
     public void push() {
-        if (alreadyClient.size() != 0)
-            resUtil.send("10086", "注意服务端发消息了！");
+/*        if (alreadyClient.size() != 0)
+            resUtil.send("10086", "注意服务端发消息了！");*/
     }
 
 }

@@ -1,6 +1,6 @@
 package com.yzy.start;
 
-import com.yzy.controller.NettyServerHandler;
+import com.yzy.socket.NettyServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -11,7 +11,10 @@ import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.net.BindException;
 
 /**
  * @Description:
@@ -25,12 +28,13 @@ public class NettyServerBootstrap implements Runnable {
     @Autowired
     private NettyServerHandler nettyServerHandler;
 
-    public static final int port = 8888;
+    @Value("${socketServer.socketPort}")
+    private int port;
 
     public NettyServerBootstrap() {
     }
 
-    public void bind() {
+    public void bind() throws BindException {
 
         EventLoopGroup boss = new NioEventLoopGroup();
         EventLoopGroup worker = new NioEventLoopGroup();
@@ -64,6 +68,9 @@ public class NettyServerBootstrap implements Runnable {
 
     @Override
     public void run() {
-        bind();
+        try {
+            bind();
+        } catch (BindException e) {
+        }
     }
 }
