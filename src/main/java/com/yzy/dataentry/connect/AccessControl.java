@@ -23,10 +23,6 @@ public class AccessControl {
     //白名单
     private Set<String> whiteList = new HashSet<>();
 
-    public boolean isNotPass(String userName){
-        return !isPass(userName);
-    }
-
     public boolean isPass(String userName) {
 
         if (whiteList.contains(userName))
@@ -35,7 +31,7 @@ public class AccessControl {
         if (blackList.contains(userName))
             return false;
 
-        return false;
+        return true;
     }
 
     public void saveBlack(String userName) {

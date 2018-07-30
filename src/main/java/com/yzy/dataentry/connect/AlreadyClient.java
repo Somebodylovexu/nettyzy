@@ -34,8 +34,8 @@ public final class AlreadyClient {
 
     public boolean add(String clientId, String channelId, SocketChannel socketChannel) {
 
-        //判断是否在名单中
-        if (accessControl.isNotPass(channelId))
+        //判断能否通过
+        if (!accessControl.isPass(channelId))
             return false;
 
         SocketInfo si = getClient(clientId);
